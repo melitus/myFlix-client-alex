@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { MovieCard } from "../movie-card/movie-card";
 
@@ -8,6 +8,14 @@ export const MainView = () => {
   const [movies, setMovies] = useState([]);
 
   const [selectMovie, setSelectedMovie] = useState(null);
+
+  useEffect(() => {
+    fetch()
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("movies from api:", data);
+    });
+  }, []);
 
   if (selectedMovie) {
     return (
