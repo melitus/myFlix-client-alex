@@ -15,7 +15,7 @@ export const LoginView = ({ onLoggedIn }) => {
       secret: password,
     };
 
-    fetch(urlAPI + "/login"), {
+    fetch(urlAPI + "/users"), {
       method: "POST",
       body: JSON.stringify(data),
     }).then((response) => {

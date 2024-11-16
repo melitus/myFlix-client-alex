@@ -17,7 +17,7 @@ export const SignupView = () => {
       Birthday: birthday,
     };
 
-    fetch(urlAPI + "/login", {
+    fetch(urlAPI + "/users/:Username", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
