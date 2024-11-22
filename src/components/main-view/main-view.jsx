@@ -1,35 +1,47 @@
-import { useState } from "react";
-
 import { MovieCard } from "../movie-card/movie-card";
-
 import { MovieView } from "../movie-view/movie-view";
+import { useState, useEffect } from "react";
+import { LoginView } from "../login-view/login-view";
+import { SignupView } from "../signup-view/signup-view";
 
 export const MainView = () => {
-  const [movies, setMovies] = useState([
-    {
-      id: 1, 
-      title: "Jurassic Park",
-      image: "https://m.media-amazon.com/images/I/61GHS6ht4uL._SL1500_.jpg",
-      genre: "Action",
-      director: "Steven Speilberg"
-    },
-    {
-      id: 2, 
-      title: "Raiders of the Lost Ark",
-      image: "https://m.media-amazon.com/images/I/91sD6F9q-DL._SL1500_.jpg",
-      genre: "Action",
-      director: "Steven Speilberg"
-    },
-    {
-      id: 3, 
-      title: "Ocean's Eleven",
-      image: "https://m.media-amazon.com/images/I/51NQ40oxXWL._SX342_.jpg",
-      genre: "Crime",
-      director: "Steven Soderbergh"
-    }
-  ]);
-
+  const urlAPI = "https://movies-flix123-4387886b5662.herokuapp.com";
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedToken = localStorage.getItem("token");
+  const [user, setUser] = useState(storedUser ? storedUser : null);
+  const [token, setToken] = useState(storedToken ? storedToken : null);
+  const [movies, setMovies] = useState([]);
   const [selectMovie, setSelectedMovie] = useState(null);
+
+  useEffect(() => {
+    if (!token) return;
+
+    fetch(urlAPI + "/movies", {
+      headers: { Authorization: `Bearer ${token}`},
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      setMovies(moviesFromApi);
+      });
+  }, [token]);
+
+  if (!user) {
+    return (
+      <>
+        <LoginView
+          onLoggedIn={(user, token) => {
+            setUser(user);
+            setToken(token);
+          }}
+        />
+        or
+        <SignupView />
+      </>
+    );
+  }
+
+  }
 
   if (selectedMovie) {
     return (
@@ -52,6 +64,13 @@ export const MainView = () => {
           }}
         />
       ))}
+      <button 
+        onClick={() => {
+          setUser(null);
+          setUser(null);
+          localStorage.clear();
+        }}
+      >Logout</button>
     </div>
   );
 };
