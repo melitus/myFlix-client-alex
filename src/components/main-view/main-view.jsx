@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import Row from "react-boostrap/Row";
+import Col from 'react-bootstrap/Col';
 
 export const MainView = () => {
   const urlAPI = "https://movies-flix123-4387886b5662.herokuapp.com";
@@ -29,7 +30,7 @@ export const MainView = () => {
 
   if (!user) {
     return (
-      <Row>
+      <Row className="justify-content-md-center">
         {!user ? (
           <>
             <LoginView
@@ -42,10 +43,12 @@ export const MainView = () => {
             <SignupView />
           </>
     ) : selectedMovie ? (
-      <MovieView 
-      movie={selectedMovie} 
-      onBackClick={() => setSelectedMovie(null)} 
-      />
+      <Col md={8}>
+        <MovieView 
+        movie={selectedMovie} 
+        onBackClick={() => setSelectedMovie(null)} 
+        />
+      </Col>
     ) : movies.length === 0 ? (
       <div>The list is empty!</div>
     ) : (
