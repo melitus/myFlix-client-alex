@@ -1,11 +1,26 @@
 // Import the PropTypes library
+import React from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-boostrap";
 import { Link } from "react-router-dom";
+import { propTypes } from "react-bootstrap/esm/Image";
 
 // The MovieCard function component
-export const MovieCard = ({ movie, onMovieClick}) => {
-  console.log(movie);
+export const MovieCard = ({ movie, user, updateFavorites}) => {
+  // Check if the movies is in the user's favorites list
+  const isFavorite = user?.FavoriteMovies.includes(movie._id);
+
+  // Handle toggle of the favorite movies
+  const handleFavoriteToggle = () => {
+    //Toggle favorite status
+    const updatedFavorites = isFavorite
+      ? user.FavoriteMovies.filter((id) => id !== movie._id) // Remove from favorites
+      : [...user.FavoriteMovies, movie._id]; // Add to favorites
+
+    // Call the function passed via props to update the backend and user state
+    updateFavorites(updateFavorites);
+  };
+
   return (
     <Card>
       <Card.Img variant="top" src={useBootstrapBreakpoints.image} />
@@ -19,6 +34,13 @@ export const MovieCard = ({ movie, onMovieClick}) => {
               Open
             </Button>
           </Link>
+          /* Favorite Button */
+          <Button 
+          variant={isFavorite ? "danger" : "primary"}
+          onClick={handleFavoriteToggle}
+        >
+          {isFavorite ? "Unfavorite" : "Favorite"}
+        </Button>
       </Card.Body>
     </Card>
   );
@@ -27,7 +49,15 @@ export const MovieCard = ({ movie, onMovieClick}) => {
 // Defined props constraints for the MovieCard
 MovieCard.propTypes = {
   movie: PropTypes.shape({
-    title: PropTypes.string
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    director: PropTypes.string,
+    genre: PropTypes.string,
+    description: PropTypes.string,
+    image: PropTypes.string
   }).isRequired,
-  onMovieClick: PropTypes.func.isRequired
+  user: PropTypes.shape({
+    FavoriteMovies: PropTypes.arrayOf(PropTypes.string) // Array of movie ids
+  }).isRequired,
+  updateFavorites: PropTypes.func.isRequired // Function to update favorites
 };
