@@ -6,7 +6,7 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "The **myFlix** front-end application is a client-side interface for a movie database built with React. This interface allows users to view and search for movies, manage their profiles, and curate a list of favorite movies.",
   "dependencies": {
     "bootstrap": "^5.3.3",
     "prop-types": "^15.8.1",
@@ -19,6 +19,8 @@
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.12.0",
+    "parcel": "^2.12.0",
     "process": "^0.11.10"
-  }
+  },
+  "main": "index.js"
 }
