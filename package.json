@@ -18,7 +18,11 @@
     "save": "^2.9.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.16.0",
     "@parcel/transformer-sass": "^2.12.0",
+    "eslint": "^9.16.0",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.12.0",
     "parcel": "^2.12.0",
     "process": "^0.11.10"
   }

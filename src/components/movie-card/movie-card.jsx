@@ -1,9 +1,8 @@
 // Import the PropTypes library
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Card } from "react-boostrap";
+import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { propTypes } from "react-bootstrap/esm/Image";
 
 // The MovieCard function component
 export const MovieCard = ({ movie, user, updateFavorites}) => {
@@ -18,23 +17,23 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
       : [...user.FavoriteMovies, movie._id]; // Add to favorites
 
     // Call the function passed via props to update the backend and user state
-    updateFavorites(updateFavorites);
+    updateFavorites(updatedFavorites);
   };
 
   return (
     <Card>
-      <Card.Img variant="top" src={useBootstrapBreakpoints.image} />
+      <Card.Img variant="top" src={movie.image} />
       <Card.Body>
         <Card.Title>{movie.title}</Card.Title>
         <Card.Text>{movie.director}</Card.Text>
         <Card.Text>{movie.genre}</Card.Text>
         <Card.Text>{movie.description}</Card.Text>
-          <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+          <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
             <Button variant="link">
               Open
             </Button>
           </Link>
-          /* Favorite Button */
+          {/* Favorite Button */}
           <Button 
           variant={isFavorite ? "danger" : "primary"}
           onClick={handleFavoriteToggle}

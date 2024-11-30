@@ -1,30 +1,70 @@
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import "./movie-view.scss";
 
-export const MovieView = ({ movie }) => {
+export const MovieView = () => {
   const { movieId } = useParams();
-  const movie = movies.find((m) => m.id === movieId);
+  const [currentMovie, setCurrentMovie] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  const urlAPI = "https://movies-flix123-4387886b5662.herokuapp.com"; // API URL
+
+  useEffect(() => {
+    // Fetch movie data from the API when the component mounts or movieId changes
+    const fetchMovie = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${urlAPI}/movies/${movieId}`);
+        
+        if (!response.ok) {
+          throw new Error("Failed to fetch movie data");
+        }
+        
+        const movie = await response.json();
+        setCurrentMovie(movie);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchMovie();
+  }, [movieId]); // Re-run the effect if the movieId changes
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!currentMovie) {
+    return <div>Movie not found!</div>;
+  }
 
   return (
     <div>
       <div>
         <span>Title: </span>
-        <span>{movie.title}</span>
+        <span>{currentMovie.title}</span>
       </div>
       <div>
         <span>Description: </span>
-        <span>{movie.description}</span>
+        <span>{currentMovie.description}</span>
       </div>
       <div>
         <span>Genre: </span>
-        <span>{movie.genre.name}</span>
-        <p>{movie.genre.description}</p>
+        <span>{currentMovie.genre.name}</span>
+        <p>{currentMovie.genre.description}</p>
       </div>
       <div>
         <span>Directed by: </span>
-        <span>{movie.director.name}</span>
-        <p>{movie.director.bio}</p>
+        <span>{currentMovie.director.name}</span>
+        <p>{currentMovie.director.bio}</p>
       </div>
       <Link to={`/`}>
         <button className="back-button">Back</button>

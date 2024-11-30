@@ -1,31 +1,26 @@
-import {Navbar, Container, Nav } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import PropTypes from "prop-types";
+import { Navbar, Container, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export const NavigationBar = ({ user, onLoggedOut }) => {
-  const navigate = useNavigate();
-
-  const handleProfileClick = (event) => {
-    event.preventDefault(); //Prevent default link behavior
-    navigate(`/users/${encodeURIComponent(user._id)}`); //Navigate to profile route
-  };
-
   return (
     <Navbar bg="light" expand="lg">
       <Container>
         <Navbar.Brand as={Link} to="/">
-        MyFlixDB
+          MyFlixDB
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             {user && user._id && (
               <>
-                <Nav.Link 
-                  as={Link}
-                  to={`/users/${encodeURIComponent(user._id)}`}
-                >
-                  Profile 
+                {/* Profile link using <Link> directly */}
+                <Nav.Link as={Link} to={`/users/${encodeURIComponent(user._id)}`}>
+                  Profile
                 </Nav.Link>
+
+                {/* Log Out link */}
                 <Nav.Link as={Link} to="/" onClick={onLoggedOut}>
                   Log Out
                 </Nav.Link>
@@ -37,3 +32,13 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
     </Navbar>
   );
 };
+
+// Prop validation
+NavigationBar.propTypes = {
+  user: PropTypes.shape({
+    _id: PropTypes.string.isRequired, // Validate the _id property of user
+  }).isRequired,
+  onLoggedOut: PropTypes.func.isRequired, // Validate that onLoggedOut is a function
+};
+
+export default NavigationBar;

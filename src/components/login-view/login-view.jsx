@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import PropTypes from "prop-types";
 
 export const LoginView = ({ onLoggedIn }) => {
   const urlAPI = "https://movies-flix123-4387886b5662.herokuapp.com";
@@ -17,7 +18,7 @@ export const LoginView = ({ onLoggedIn }) => {
       secret: password,
     };
 
-    fetch(urlAPI + "/users"), {
+    fetch(urlAPI + "/users", {
       method: "POST",
       body: JSON.stringify(data),
     }).then((response) => {
@@ -63,4 +64,9 @@ export const LoginView = ({ onLoggedIn }) => {
       </Button>
     </Form>
   );
+};
+
+// Prop validation
+LoginView.propTypes = {
+  onLoggedIn: PropTypes.func.isRequired,
 };
