@@ -6,7 +6,7 @@ import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { BrowserRouter, Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router";
 
 export const MainView = () => {
   const urlAPI = "https://movies-flix123-4387886b5662.herokuapp.com";
@@ -16,7 +16,7 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser || null);
   const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
-  const navigate = useNavigate();
+
 
   const onLoggedOut = () => {
     setUser(null);
