@@ -6,7 +6,7 @@ import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 
 export const MainView = () => {
   const urlAPI = "https://movies-flix123-4387886b5662.herokuapp.com";
@@ -55,10 +55,18 @@ export const MainView = () => {
               path="/login"
               element={
                 <Col md={5}>
-                  <LoginView onLoggedIn={(user) => setUser(user)} />
+                  <LoginView 
+                  onLoggedIn={(user, token) => {
+                    localStorage.setItem("user", JSON.stringify(user));
+                    localStorage.setItem("token", token);
+                    setUser(user);
+                    setToken(token);
+                  }} />
                 </Col>
               }
             />
+            {/* Redirect any other path to login */}
+            <Route path="*" element={<Navigate to="/login" />} /> 
           </Routes>
         </Row>
       </BrowserRouter>
@@ -99,6 +107,8 @@ export const MainView = () => {
               </>
             }
           />
+          {/* Redirect any undefined route to home */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Row>
     </BrowserRouter>

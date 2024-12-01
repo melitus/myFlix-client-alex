@@ -16,14 +16,10 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
             {user && user._id && (
               <>
                 {/* Profile link using <Link> directly */}
-                <Nav.Link as={Link} to={`/users/${encodeURIComponent(user._id)}`}>
-                  Profile
-                </Nav.Link>
+                <Nav.Link as={Link} to={`/users/${encodeURIComponent(user._id)}`}>Profile</Nav.Link>
 
                 {/* Log Out link */}
-                <Nav.Link as={Link} to="/" onClick={onLoggedOut}>
-                  Log Out
-                </Nav.Link>
+                <Nav.Link as={Link} to="/" onClick={onLoggedOut}>Log Out</Nav.Link>
               </>
             )}
           </Nav>

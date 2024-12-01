@@ -14,27 +14,31 @@ export const LoginView = ({ onLoggedIn }) => {
     event.preventDefault();
 
     const data = {
-      access: username,
-      secret: password,
+      Username: username,
+      Password: password,
     };
 
-    fetch(urlAPI + "/users", {
+    fetch(urlAPI + "/login", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
-    }).then((response) => {
-      if (response.ok) {
-        onLoggedIn(username);
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.token) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token);
+        onLoggedIn(data.user, data.token);
       } else {
-        alert("Login failed");
+        alert(data.message || "Login failed");
       }
+    })
+    .catch((error) => {
+      console.error('Login error:', error);
+      alert('Login failed, please try again');
     });
-    if (data.user) {
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token);
-      onLoggedIn(data.user, data.token);
-    } else {
-      alert("No such user");
-    }
   };
 
   return (
