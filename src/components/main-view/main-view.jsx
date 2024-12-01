@@ -24,6 +24,7 @@ export const MainView = () => {
   };
 
   useEffect(() => {
+    console.log("TOKEN:" + token);
     if (!token) return;
 
     fetch(urlAPI + "/movies", {
@@ -57,6 +58,7 @@ export const MainView = () => {
                 <Col md={5}>
                   <LoginView 
                   onLoggedIn={(user, token) => {
+                    console.log(token);
                     localStorage.setItem("user", JSON.stringify(user));
                     localStorage.setItem("token", token);
                     setUser(user);
