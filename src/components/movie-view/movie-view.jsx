@@ -30,7 +30,6 @@ export const MovieView = () => {
         setLoading(false);
       }
     };
-    
     fetchMovie();
   }, [movieId]); // Re-run the effect if the movieId changes
 
@@ -50,21 +49,21 @@ export const MovieView = () => {
     <div>
       <div>
         <span>Title: </span>
-        <span>{currentMovie.title}</span>
+        <span>{currentMovie.Title}</span>
       </div>
       <div>
         <span>Description: </span>
-        <span>{currentMovie.description}</span>
+        <span>{currentMovie.Description}</span>
       </div>
       <div>
         <span>Genre: </span>
-        <span>{currentMovie.genre.name}</span>
-        <p>{currentMovie.genre.description}</p>
+        <span>{currentMovie.Genre.Name}</span>
+        <p>{currentMovie.Genre.Description}</p>
       </div>
       <div>
         <span>Directed by: </span>
-        <span>{currentMovie.director.name}</span>
-        <p>{currentMovie.director.bio}</p>
+        <span>{currentMovie.Director.Name}</span>
+        <p>{currentMovie.Director.Bio}</p>
       </div>
       <Link to={`/`}>
         <button className="back-button">Back</button>

@@ -3,11 +3,20 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router";
+import { useNavigate } from "react-router";
+
 
 // The MovieCard function component
 export const MovieCard = ({ movie, user, updateFavorites}) => {
   // Check if the movies is in the user's favorites list
   const isFavorite = user?.FavoriteMovies.includes(movie._id);
+  
+  // Used for routing to movies view for button
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate(`/movies/${encodeURIComponent(movie._id)}`);
+  }
 
   // Handle toggle of the favorite movies
   const handleFavoriteToggle = () => {
@@ -22,17 +31,22 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
 
   return (
     <Card>
-      <Card.Img variant="top" src={movie.image} />
+      <Card.Img variant="top" src={movie.Image} />
       <Card.Body>
-        <Card.Title>{movie.title}</Card.Title>
-        <Card.Text>{movie.director}</Card.Text>
-        <Card.Text>{movie.genre}</Card.Text>
-        <Card.Text>{movie.description}</Card.Text>
-          <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
-            <Button variant="link">
+        <Card.Title>{movie.Title}</Card.Title>
+        <Card.Text>{movie.Director.Name}</Card.Text>
+        <Card.Text>{movie.Genre.Name}</Card.Text>
+        {/*<Card.Text>{movie.Description}</Card.Text>*/}
+          {/* <Link to={`/movies/${encodeURIComponent(movie._id)}`}> */}
+            <Button 
+              variant="link" 
+              onClick={() => {
+                handleClick();
+              }}
+              >
               Open
             </Button>
-          </Link>
+          {/*</Link>*/}
           {/* Favorite Button */}
           <Button 
           variant={isFavorite ? "danger" : "primary"}
@@ -49,11 +63,11 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
 MovieCard.propTypes = {
   movie: PropTypes.shape({
     _id: PropTypes.string.isRequired,
-    title: PropTypes.string,
-    director: PropTypes.string,
-    genre: PropTypes.string,
-    description: PropTypes.string,
-    image: PropTypes.string
+    Title: PropTypes.string,
+    Director: PropTypes.string,
+    Genre: PropTypes.string,
+    Description: PropTypes.string,
+    Image: PropTypes.string
   }).isRequired,
   user: PropTypes.shape({
     FavoriteMovies: PropTypes.arrayOf(PropTypes.string) // Array of movie ids
