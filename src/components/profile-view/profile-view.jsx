@@ -11,39 +11,43 @@ export const ProfileView = ({ movies }) => {
   const [formData, setFormData] = useState({});
   const [showDeregisterModal, setShowDeregisterModal] = useState(false);
 
-  const loggedInUsername = localStorage.getItem("username");
+  const loggedInUser = JSON.parse(localStorage.getItem("user"));
+  const loggedInUsername = loggedInUser.Username;
+
+  const urlAPI = "https://movies-flix123-4387886b5662.herokuapp.com"; // API URL
 
   // Fetch user data on mount
   useEffect(() => {
     const fetchUserData = async () => {
+      console.log(loggedInUsername);
       try {
-        const response = await fetch("/users", {
+        const response = await fetch(`${urlAPI}/users/${loggedInUsername}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-
+        console.log(JSON.stringify(response.body));
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
-
-        const users = await response.json();
-        const loggedInUser = users.find(user => user.username === loggedInUsername);
-
-        if (!loggedInUser) {
-          throw new Error("Logged-in user not found in the users list.");
-        }
-
-        setUser(loggedInUser);
-        setFormData(loggedInUser);
+    
+        const userData = await response.json(); // Parse JSON response
+        setUser(userData); // Set user data
+        setFormData(userData); // Populate form data for editing
       } catch (err) {
         setError(err.message);
+        console.log(err);
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading to false after fetch
       }
     };
 
-    fetchUserData();
+    if (loggedInUsername) {
+      fetchUserData();
+    } else {
+      setError("No logged-in username found.");
+      setLoading(false);
+    }
   }, [loggedInUsername]);
 
   // Filter user's favorite movies
@@ -64,7 +68,7 @@ export const ProfileView = ({ movies }) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`/users/${user.id}`, {
+      const response = await fetch(`/users/${loggedInUsername}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +92,7 @@ export const ProfileView = ({ movies }) => {
   // Deregister user
   const handleDeregister = async () => {
     try {
-      const response = await fetch(`/users/${user.id}`, {
+      const response = await fetch(`/users/${loggedInUsername}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -138,7 +142,7 @@ export const ProfileView = ({ movies }) => {
             <Form.Control
               type="text"
               name="name"
-              value={formData.name || ""}
+              value={formData.Name || ""}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -147,7 +151,7 @@ export const ProfileView = ({ movies }) => {
             <Form.Control
               type="email"
               name="email"
-              value={formData.email || ""}
+              value={formData.Email || ""}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -156,7 +160,7 @@ export const ProfileView = ({ movies }) => {
             <Form.Control
               type="text"
               name="username"
-              value={formData.username || ""}
+              value={formData.Username || ""}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -165,7 +169,7 @@ export const ProfileView = ({ movies }) => {
             <Form.Control
               type="date"
               name="dateOfBirth"
-              value={formData.dateOfBirth || ""}
+              value={formData.Birthday || ""}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -182,13 +186,13 @@ export const ProfileView = ({ movies }) => {
             <strong>Name:</strong> {user.name}
           </p>
           <p>
-            <strong>Email:</strong> {user.email}
+            <strong>Email:</strong> {user.Email}
           </p>
           <p>
-            <strong>Username:</strong> {user.username}
+            <strong>Username:</strong> {user.Username}
           </p>
           <p>
-            <strong>Birthday:</strong> {user.dateOfBirth}
+            <strong>Birthday:</strong> {user.Birthday}
           </p>
           <Button variant="primary" onClick={handleEditToggle}>
             Edit Profile

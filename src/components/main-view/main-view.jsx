@@ -4,6 +4,7 @@ import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
+import { ProfileView } from "../profile-view/profile-view"
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
@@ -41,34 +42,53 @@ export const MainView = () => {
   if (!user) {
     return (
       <BrowserRouter>
-        <NavigationBar user={user} onLoggedOut={onLoggedOut} />
+        <NavigationBar 
+          user={user} 
+          onLoggedOut={() => {
+          setUser(null);
+        }} 
+        />
         <Row className="justify-content-md-center">
           <Routes>
             <Route
               path="/signup"
               element={
-                <Col md={5}>
-                  <SignupView />
-                </Col>
+                <>
+                  {user ? (
+                    <Navigate to="/" />
+                  ) : (
+                    <Col md={5}>
+                      <SignupView />
+                    </Col>
+              )}
+            </>
               }
             />
             <Route
               path="/login"
               element={
-                <Col md={5}>
+                <>
+                  {user ? (
+                    <Navigate to="/" />
+                  ) : (
+                    <Col md={5}>
                   <LoginView 
                   onLoggedIn={(user, token) => {
                     console.log(token);
-                    localStorage.setItem("user", JSON.stringify(user));
-                    localStorage.setItem("token", token);
                     setUser(user);
                     setToken(token);
                   }} />
                 </Col>
+                  )}
+                </>
+                  
               }
             />
             {/* Redirect any other path to login */}
-            <Route path="*" element={<Navigate to="/login" />} /> 
+            <Route 
+              path="*" 
+              element={
+              <Navigate to="/login" />} /> 
           </Routes>
         </Row>
       </BrowserRouter>
@@ -78,7 +98,9 @@ export const MainView = () => {
   // Authenticated users can access movie and other routes
   return (
     <BrowserRouter>
-      <NavigationBar user={user} onLoggedOut={onLoggedOut} />
+      <NavigationBar user={user} onLoggedOut={() => {
+        setUser(null);
+      }} />
       <Row className="justify-content-md-center">
         <Routes>
           {/* Movie details page */}
@@ -111,6 +133,7 @@ export const MainView = () => {
           />
           {/* Redirect any undefined route to home */}
           <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/profile" element={<ProfileView movies={movies} />} />
         </Routes>
       </Row>
     </BrowserRouter>

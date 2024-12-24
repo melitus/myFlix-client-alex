@@ -14,6 +14,8 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
   // Used for routing to movies view for button
   const navigate = useNavigate();
 
+  console.log("User prop:", user);
+
   function handleClick() {
     navigate(`/movies/${encodeURIComponent(movie._id)}`);
   }
