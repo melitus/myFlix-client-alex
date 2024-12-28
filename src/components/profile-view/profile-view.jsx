@@ -222,18 +222,16 @@ export const ProfileView = ({ movies }) => {
       <h2>Favorite Movies</h2>
       {favoriteMovies.length > 0 ? (
         <Row>
-          {favoriteMovies.map((movie) => (
-            <Col key={movie._id} sm={6} md={4} lg={3}>
-              {user && ( // Ensures user exists before rendering MovieCard
-                <MovieCard
-                movie={movie}
-                user={user}
-                updateFavorites={updateFavorites}
-              />
-              )}
-            </Col>
-          ))}
-        </Row>
+        {movies.map((movie) => (
+          <Col key={movie._id} sm={6} md={4} lg={3}>
+            <MovieCard
+              movie={movie}
+              user={user}
+              updateFavorites={updateFavorites} // Pass this function as a prop
+            />
+          </Col>
+        ))}
+      </Row>
       ) : (
         <p>No favorite movies added yet.</p>
       )}
