@@ -114,8 +114,27 @@ export const ProfileView = ({ movies }) => {
   };
 
   // Placeholder for updating favorites
-  const updateFavorites = (movieId) => {
-    console.log("Updating favorites for movie:", movieId);
+  const updateFavorites = async (newFavorites) => {
+    try {
+      const response = await fetch(`${urlAPI}/users/${loggedInUsername}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ FavoriteMovies: newFavorites }),
+      });
+
+      if (!response.ok) {
+        throw new error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      const updatedUser = await response.json(); // Get the updated user data
+      setUser(updatedUser); // Update the user state to reflect the changes
+    } catch (err) {
+      console.error("Error updating favorites:", err.message);
+      setError(err.message);
+    }
   };
 
   // Render loading spinner
@@ -205,11 +224,13 @@ export const ProfileView = ({ movies }) => {
         <Row>
           {favoriteMovies.map((movie) => (
             <Col key={movie._id} sm={6} md={4} lg={3}>
-              <MovieCard
+              {user && ( // Ensures user exists before rendering MovieCard
+                <MovieCard
                 movie={movie}
                 user={user}
                 updateFavorites={updateFavorites}
               />
+              )}
             </Col>
           ))}
         </Row>
