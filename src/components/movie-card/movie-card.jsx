@@ -23,18 +23,12 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
   // Handle toggle of the favorite movies
   const handleFavoriteToggle = () => {
     //Toggle favorite status
-    console.log("Favorite button clicked");
     const newFavorites = isFavorite
       ? user.FavoriteMovies.filter((id) => id !== movie._id) || [] // Remove from favorites
       : [...(user?.FavoriteMovies || []), movie._id]; // Add to favorites
 
-    // Use the function passed via props
-
-  if (typeof updateFavorites === "function") {
-    updateFavorites(newFavorites); // Call the function to update favorites
-  } else {
-    console.error("updateFavorites is not a function")
-  }
+    // Call the function passed via props to update the backend and user state
+    updateFavorites(newFavorites);
   };
 
   return (
@@ -55,8 +49,8 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
           {/*</Link>*/}
           {/* Favorite Button */}
           <Button 
-            variant={isFavorite ? "danger" : "primary"}
-            onClick={handleFavoriteToggle}
+          variant={isFavorite ? "danger" : "primary"}
+          onClick={handleFavoriteToggle}
         >
           {isFavorite ? "Unfavorite" : "Favorite"}
         </Button>

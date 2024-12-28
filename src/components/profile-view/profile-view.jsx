@@ -114,8 +114,7 @@ export const ProfileView = ({ movies }) => {
   };
 
   // Placeholder for updating favorites
-  const updateFavorites = async (favorites) => {
-    console.log("Attempting to update favorites:", favorites);
+  const updateFavorites = async (newFavorites) => {
     try {
       const response = await fetch(`${urlAPI}/users/${loggedInUsername}`, {
         method: "PUT",
@@ -123,7 +122,7 @@ export const ProfileView = ({ movies }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ FavoriteMovies: favorites }),
+        body: JSON.stringify({ FavoriteMovies: newFavorites }),
       });
 
       if (!response.ok) {
@@ -131,7 +130,6 @@ export const ProfileView = ({ movies }) => {
       }
 
       const updatedUser = await response.json(); // Get the updated user data
-      console.log("Updated user from the API:", updatedUser);
       setUser(updatedUser); // Update the user state to reflect the changes
     } catch (err) {
       console.error("Error updating favorites:", err.message);
@@ -224,18 +222,16 @@ export const ProfileView = ({ movies }) => {
       <h2>Favorite Movies</h2>
       {favoriteMovies.length > 0 ? (
         <Row>
-        {favoriteMovies.map((movie) => (
+        {movies.map((movie) => (
           <Col key={movie._id} sm={6} md={4} lg={3}>
-            {user && (
-              <MovieCard
-                movie={movie}
-                user={user}
-                updateFavorites={updateFavorites} // Pass the function here
-              />
-            )}
+            <MovieCard
+              movie={movie}
+              user={user}
+              updateFavorites={updateFavorites} // Pass this function as a prop
+            />
           </Col>
         ))}
-      </Row>      
+      </Row>
       ) : (
         <p>No favorite movies added yet.</p>
       )}
