@@ -9,26 +9,26 @@ import { useNavigate } from "react-router";
 // The MovieCard function component
 export const MovieCard = ({ movie, user, updateFavorites}) => {
   // Check if the movies is in the user's favorites list
-  const isFavorite = user?.FavoriteMovies?.includes(movie._id) || false;
+  const isFavorite = user?.FavoriteMovies.includes(movie._id);
   
   // Used for routing to movies view for button
   const navigate = useNavigate();
 
-  // console.log("User prop:", user);
+  console.log("User prop:", user);
 
-  const handleClick = () => {
+  function handleClick() {
     navigate(`/movies/${encodeURIComponent(movie._id)}`);
-  };
+  }
 
   // Handle toggle of the favorite movies
   const handleFavoriteToggle = () => {
     //Toggle favorite status
-    const newFavorites = isFavorite
-      ? user.FavoriteMovies.filter((id) => id !== movie._id) || [] // Remove from favorites
-      : [...(user?.FavoriteMovies || []), movie._id]; // Add to favorites
+    const updatedFavorites = isFavorite
+      ? user.FavoriteMovies.filter((id) => id !== movie._id) // Remove from favorites
+      : [...user.FavoriteMovies, movie._id]; // Add to favorites
 
     // Call the function passed via props to update the backend and user state
-    updateFavorites(newFavorites);
+    updateFavorites(updatedFavorites);
   };
 
   return (
@@ -42,7 +42,9 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
           {/* <Link to={`/movies/${encodeURIComponent(movie._id)}`}> */}
             <Button 
               variant="link" 
-              onClick={handleClick}
+              onClick={() => {
+                handleClick();
+              }}
               >
               Open
             </Button>
