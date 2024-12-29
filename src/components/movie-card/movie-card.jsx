@@ -22,18 +22,32 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
 
   // Handle toggle of the favorite movies
   const handleFavoriteToggle = () => {
-    //Toggle favorite status
-    const updatedFavorites = isFavorite
-      ? user.FavoriteMovies.filter((id) => id !== movie._id) // Remove from favorites
-      : [...user.FavoriteMovies, movie._id]; // Add to favorites
+    const movieID = movie._id;
+    
+    fetch(urlAPI + `/users/${loggedInUsername}/movies/${movieID}`, {
+        method: "POST",
+        body: JSON.stringify(),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    }
 
-    // Call the function passed via props to update the backend and user state
-    updateFavorites(updatedFavorites);
+    // console.log("User:", user);
+    // console.log("User's FavoriteMovies:", user?.FavoriteMovies);
+    
+    // //Toggle favorite status
+    // const updatedFavorites = isFavorite
+    //   ? user.FavoriteMovies.filter((id) => id !== movie._id) // Remove from favorites
+    //   : [...user.FavoriteMovies, movie._id]; // Add to favorites
+
+    // // Call the function passed via props to update the backend and user state
+    // updateFavorites(updatedFavorites);
   };
 
   return (
     <Card>
-      <Card.Img variant="top" src={movie.Image} />
+      <Card.Img variant="top" src={movie.ImagePath} />
       <Card.Body>
         <Card.Title>{movie.Title}</Card.Title>
         <Card.Text>{movie.Director.Name}</Card.Text>
@@ -69,7 +83,7 @@ MovieCard.propTypes = {
     Director: PropTypes.string,
     Genre: PropTypes.string,
     Description: PropTypes.string,
-    Image: PropTypes.string
+    ImagePath: PropTypes.string
   }).isRequired,
   user: PropTypes.shape({
     FavoriteMovies: PropTypes.arrayOf(PropTypes.string) // Array of movie ids
