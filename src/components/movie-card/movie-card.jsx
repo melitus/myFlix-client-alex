@@ -23,31 +23,26 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
   // Handle toggle of the favorite movies
   const handleFavoriteToggle = () => {
     const movieID = movie._id;
-    const method = isFavorite ? "DELETE" : "POST";
     
     fetch(urlAPI + `/users/${loggedInUsername}/movies/${movieID}`, {
-        method: method,
+        method: "POST",
+        body: JSON.stringify(),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Token for authentication 
         },
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-          }
-          return response.json();
-        })
-        .then((updatedUser) => {
-          console.log("Updated user:", updatedUser);
+    }
 
-          // Update the frontend state wih the updated favorites
-          updateFavorites(updatedUser.FavoriteMovies);''
-        })
-        .catch((err) => {
-          console.error("Failed to update favorites:", err);
-        });
-    };
+    // console.log("User:", user);
+    // console.log("User's FavoriteMovies:", user?.FavoriteMovies);
+    
+    // //Toggle favorite status
+    // const updatedFavorites = isFavorite
+    //   ? user.FavoriteMovies.filter((id) => id !== movie._id) // Remove from favorites
+    //   : [...user.FavoriteMovies, movie._id]; // Add to favorites
+
+    // // Call the function passed via props to update the backend and user state
+    // updateFavorites(updatedFavorites);
   };
 
   return (
@@ -78,6 +73,7 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
       </Card.Body>
     </Card>
   );
+};
 
 // Defined props constraints for the MovieCard
 MovieCard.propTypes = {
