@@ -7,8 +7,10 @@ import { useNavigate } from "react-router";
 
 
 // The MovieCard function component
-export const MovieCard = ({ movie, user, updateFavorites}) => {
+export const MovieCard = ({ movie, user, updateFavorites, loggedInUsername }) => {
+  console.log(loggedInUsername);
   // Check if the movies is in the user's favorites list
+  const urlAPI = "https://movies-flix123-4387886b5662.herokuapp.com";
   const isFavorite = user?.FavoriteMovies.includes(movie._id);
   
   // Used for routing to movies view for button
@@ -22,27 +24,37 @@ export const MovieCard = ({ movie, user, updateFavorites}) => {
 
   // Handle toggle of the favorite movies
   const handleFavoriteToggle = () => {
+    console.log(loggedInUsername);
     const movieID = movie._id;
-    
-    fetch(urlAPI + `/users/${loggedInUsername}/movies/${movieID}`, {
-        method: "POST",
-        body: JSON.stringify(),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+
+    const method = isFavorite ? "DELETE" : "POST"; // DELETE for unfavorite, POST for favorite
+
+    //Favorite movie check
+    if (isFavorite && method === "POST") {
+      console.log("Movie is already in the favorites list. No action taken.");
+      return;
     }
 
-    // console.log("User:", user);
-    // console.log("User's FavoriteMovies:", user?.FavoriteMovies);
-    
-    // //Toggle favorite status
-    // const updatedFavorites = isFavorite
-    //   ? user.FavoriteMovies.filter((id) => id !== movie._id) // Remove from favorites
-    //   : [...user.FavoriteMovies, movie._id]; // Add to favorites
-
-    // // Call the function passed via props to update the backend and user state
-    // updateFavorites(updatedFavorites);
+    fetch(`${urlAPI}/users/${loggedInUsername}/movies/${movieID}`, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token if required
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((updatedUser) => {
+        updateFavorites(updatedUser.FavoriteMovies); // Update favorites list
+        setIsFavorite(updatedUser.FavoriteMovies.some((movie) => movie._id === movieID));
+      })
+      .catch((err) => {
+        console.error("Failed to update favorites:", err);
+      });
   };
 
   return (
@@ -88,5 +100,6 @@ MovieCard.propTypes = {
   user: PropTypes.shape({
     FavoriteMovies: PropTypes.arrayOf(PropTypes.string) // Array of movie ids
   }).isRequired,
-  updateFavorites: PropTypes.func.isRequired // Function to update favorites
+  updateFavorites: PropTypes.func.isRequired, // Function to update favorites
+  loggedInUsername: PropTypes.string.isRequired
 };

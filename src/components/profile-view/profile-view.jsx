@@ -205,10 +205,13 @@ export const ProfileView = ({ movies }) => {
         <Row>
           {favoriteMovies.map((movie) => (
             <Col key={movie._id} sm={6} md={4} lg={3}>
-              <MovieCard
+              <MovieCard 
                 movie={movie}
                 user={user}
-                updateFavorites={updateFavorites}
+                updateFavorites={(updatedFavorites) => {
+                setUser({ ...user, FavoriteMovies: updatedFavorites });
+                }}
+                loggedInUsername={user.Username}
               />
             </Col>
           ))}
