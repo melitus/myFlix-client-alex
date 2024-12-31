@@ -1,9 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container, Nav, Form, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router";
 
 export const NavigationBar = ({ user, onLoggedOut }) => {
+
+  const genreSearch = () => {
+    console.log("test");
+  }
+
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -34,6 +39,20 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
               </>
             )}
           </Nav>
+            <Form inline>
+              <Row>
+                <Col xs="auto">
+                  <Form.Control
+                    type="text"
+                    placeholder="Search"
+                    className=" mr-sm-2"
+                  />
+                </Col>
+                <Col xs="auto">
+                  <Button type="submit" onClick={genreSearch}>Submit</Button>
+                </Col>
+              </Row>
+            </Form>
         </Navbar.Collapse>
       </Container>
     </Navbar>
