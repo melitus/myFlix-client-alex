@@ -17,7 +17,8 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser || null);
   const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
-
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [searchVal, setSearchVal] = useState("");
 
   const onLoggedOut = () => {
     setUser(null);
@@ -37,6 +38,18 @@ export const MainView = () => {
         setMovies(data);
       });
   }, [token]);
+
+  // Filters movies as the user types
+  useEffect(() => {
+    if (searchVal === "") {
+      setFilteredMovies(movies); // show all movies if input is empty
+    } else {
+      const filtered = movies.filter((movie) =>
+        movie.Genre.Name.toLowerCase().includes(searchVal.toLowerCase())
+      );
+      setFilteredMovies(filtered);
+    }
+  }, [searchVal, movies]); // Trigger whenever searchVal or movies change
 
   // Unauthenticated users get login/signup routes
   if (!user) {
@@ -102,6 +115,16 @@ export const MainView = () => {
         setUser(null);
       }} />
       <Row className="justify-content-md-center">
+        {/* Search Bar added above movie list */}
+        <div style={{ textAlign: "center", margin: "20px 0"}}>
+          <input
+            type="text"
+            placeholder="Seach by genre"
+            value={searchVal}
+            onChange={(e) => setSearchVal(e.target.value)}
+          />
+        </div>
+
         <Routes>
           {/* Movie details page */}
           <Route
@@ -117,11 +140,11 @@ export const MainView = () => {
             path="/"
             element={
               <>
-                {movies.length === 0 ? (
+                {filteredMovies.length === 0 ? (
                   <Col>The list is empty!</Col>
                 ) : (
                   <>
-                    {movies.map((movie) => (
+                    {filteredMovies.map((movie) => (
                       <Col className="mb-4" key={movie._id} md={3}>
                         <MovieCard 
                           movie={movie}

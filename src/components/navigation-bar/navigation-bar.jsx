@@ -6,7 +6,7 @@ import { Link } from "react-router";
 export const NavigationBar = ({ user, onLoggedOut }) => {
 
   const genreSearch = () => {
-    console.log("test");
+    
   }
 
   return (
@@ -47,9 +47,6 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
                     placeholder="Search"
                     className=" mr-sm-2"
                   />
-                </Col>
-                <Col xs="auto">
-                  <Button type="submit" onClick={genreSearch}>Submit</Button>
                 </Col>
               </Row>
             </Form>
