@@ -111,61 +111,61 @@ export const MainView = () => {
   // Authenticated users can access movie and other routes
   return (
     <BrowserRouter>
-      <NavigationBar user={user} onLoggedOut={() => {
-        setUser(null);
-      }} />
-      <Row className="justify-content-md-center">
-        {/* Search Bar added above movie list */}
-        <div style={{ textAlign: "center", margin: "20px 0"}}>
+      <NavigationBar
+        user={user}
+        onLoggedOut={() => {
+          setUser(null);
+        }}
+      />
+    <Row className="justify-content-md-center">
+      {/* Conditionally render search bar only on the home page */}
+      {location.pathname === "/" ? (
+        <div style={{ textAlign: "center", margin: "20px 0" }}>
           <input
             type="text"
-            placeholder="Seach by genre"
+            placeholder="Search by Genre"
             value={searchVal}
             onChange={(e) => setSearchVal(e.target.value)}
           />
         </div>
+      ) : null}
+      <Routes>
+        <Route
+          path="/movies/:movieId"
+          element={
+            <Col md={8}>
+              <MovieView movies={movies} />
+            </Col>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <>
+              {filteredMovies.length === 0 ? (
+                <Col>The list is empty!</Col>
+              ) : (
+                filteredMovies.map((movie) => (
+                  <Col className="mb-4" key={movie._id} md={3}>
+                    <MovieCard
+                      movie={movie}
+                      user={user}
+                      updateFavorites={(updatedFavorites) => {
+                        setUser({ ...user, FavoriteMovies: updatedFavorites });
+                      }}
+                      loggedInUsername={user.Username}
+                    />
+                  </Col>
+                ))
+              )}
+            </>
+          }
+        />
+        <Route path="/profile" element={<ProfileView movies={movies} />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Row>
 
-        <Routes>
-          {/* Movie details page */}
-          <Route
-            path="/movies/:movieId"
-            element={
-              <Col md={8}>
-                <MovieView movies={movies} />
-              </Col>
-            }
-          />
-          {/* Home page with movie list */}
-          <Route
-            path="/"
-            element={
-              <>
-                {filteredMovies.length === 0 ? (
-                  <Col>The list is empty!</Col>
-                ) : (
-                  <>
-                    {filteredMovies.map((movie) => (
-                      <Col className="mb-4" key={movie._id} md={3}>
-                        <MovieCard 
-                          movie={movie}
-                          user={user}
-                          updateFavorites={(updatedFavorites) => {
-                            setUser({ ...user, FavoriteMovies: updatedFavorites });
-                          }}
-                          loggedInUsername={user.Username}
-                           />
-                      </Col>
-                    ))}
-                  </>
-                )}
-              </>
-            }
-          />
-          {/* Redirect any undefined route to home */}
-          <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/profile" element={<ProfileView movies={movies} />} />
-        </Routes>
-      </Row>
     </BrowserRouter>
   );
 };

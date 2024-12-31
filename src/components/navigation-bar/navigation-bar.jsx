@@ -39,17 +39,6 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
               </>
             )}
           </Nav>
-            <Form inline>
-              <Row>
-                <Col xs="auto">
-                  <Form.Control
-                    type="text"
-                    placeholder="Search"
-                    className=" mr-sm-2"
-                  />
-                </Col>
-              </Row>
-            </Form>
         </Navbar.Collapse>
       </Container>
     </Navbar>
