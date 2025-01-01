@@ -23,6 +23,8 @@ export const MainView = () => {
   const onLoggedOut = () => {
     setUser(null);
     setToken(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   useEffect(() => {
@@ -58,7 +60,10 @@ export const MainView = () => {
         <NavigationBar 
           user={user} 
           onLoggedOut={() => {
-          setUser(null);
+            setUser(null);
+            setToken(null);
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
         }} 
         />
         <Row className="justify-content-md-center">
@@ -115,6 +120,9 @@ export const MainView = () => {
         user={user}
         onLoggedOut={() => {
           setUser(null);
+          setToken(null);
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
         }}
       />
     <Row className="justify-content-md-center">
