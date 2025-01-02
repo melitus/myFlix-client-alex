@@ -95,7 +95,7 @@ export const ProfileView = ({ movies }) => {
   // Deregister user
   const handleDeregister = async () => {
     try {
-      const response = await fetch(`/users/${loggedInUsername}`, {
+      const response = await fetch(`${urlAPI}/users/${loggedInUsername}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -195,6 +195,11 @@ export const ProfileView = ({ movies }) => {
           </p>
           <Button variant="primary" onClick={handleEditToggle}>
             Edit Profile
+          </Button>
+          <br></br>
+          <br></br>
+          <Button variant="primary" onClick={() => setShowDeregisterModal(true)}>
+            Deregister
           </Button>
         </div>
       )}

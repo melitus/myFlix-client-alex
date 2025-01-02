@@ -7,7 +7,7 @@ import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view"
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router";
 
 export const MainView = () => {
   const urlAPI = "https://movies-flix123-4387886b5662.herokuapp.com";
@@ -53,127 +53,107 @@ export const MainView = () => {
     }
   }, [searchVal, movies]); // Trigger whenever searchVal or movies change
 
-  // Unauthenticated users get login/signup routes
-  if (!user) {
+  const AuthenticatedApp = () => {
+    const location = useLocation();
+
     return (
-      <BrowserRouter>
-        <NavigationBar 
-          user={user} 
+      <>
+        <NavigationBar
+          user={user}
           onLoggedOut={() => {
             setUser(null);
             setToken(null);
             localStorage.removeItem("user");
             localStorage.removeItem("token");
-        }} 
+          }}
         />
+        <Row className="justify-content-md-center">
+          {/* Conditionally render search bar only on the home page */}
+          {location.pathname === "/" && (
+            <div style={{ textAlign: "center", margin: "20px 0" }}>
+              <input
+                type="text"
+                placeholder="Search by Genre"
+                value={searchVal}
+                onChange={(e) => setSearchVal(e.target.value)}
+              />
+            </div>
+          )}
+          <Routes>
+            <Route
+              path="/movies/:movieId"
+              element={
+                <Col md={8}>
+                  <MovieView movies={movies} />
+                </Col>
+              }
+            />
+            <Route
+              path="/"
+              element={
+                filteredMovies.length === 0 ? (
+                  <Col>The list is empty!</Col>
+                ) : (
+                  filteredMovies.map((movie) => (
+                    <Col className="mb-4" key={movie._id} md={3}>
+                      <MovieCard
+                        movie={movie}
+                        user={user}
+                        updateFavorites={(updatedFavorites) => {
+                          setUser({ ...user, FavoriteMovies: updatedFavorites });
+                        }}
+                        loggedInUsername={user.Username}
+                      />
+                    </Col>
+                  ))
+                )
+              }
+            />
+            <Route path="/profile" element={<ProfileView movies={movies} />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </Row>
+      </>
+    );
+  };
+
+  if (!user) {
+    return (
+      <BrowserRouter>
+        <NavigationBar user={user} onLoggedOut={onLoggedOut} />
         <Row className="justify-content-md-center">
           <Routes>
             <Route
               path="/signup"
               element={
-                <>
-                  {user ? (
-                    <Navigate to="/" />
-                  ) : (
-                    <Col md={5}>
-                      <SignupView />
-                    </Col>
-              )}
-            </>
+                <Col md={5}>
+                  <SignupView />
+                </Col>
               }
             />
             <Route
               path="/login"
               element={
-                <>
-                  {user ? (
-                    <Navigate to="/" />
-                  ) : (
-                    <Col md={5}>
-                  <LoginView 
-                  onLoggedIn={(user, token) => {
-                    console.log(token);
-                    setUser(user);
-                    setToken(token);
-                  }} />
+                <Col md={5}>
+                  <LoginView
+                    onLoggedIn={(user, token) => {
+                      setUser(user);
+                      setToken(token);
+                    }}
+                  />
                 </Col>
-                  )}
-                </>
-                  
               }
             />
-            {/* Redirect any other path to login */}
-            <Route 
-              path="*" 
-              element={
-              <Navigate to="/login" />} /> 
+            <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         </Row>
       </BrowserRouter>
     );
   }
 
-  // Authenticated users can access movie and other routes
   return (
     <BrowserRouter>
-      <NavigationBar
-        user={user}
-        onLoggedOut={() => {
-          setUser(null);
-          setToken(null);
-          localStorage.removeItem("user");
-          localStorage.removeItem("token");
-        }}
-      />
-    <Row className="justify-content-md-center">
-      {/* Conditionally render search bar only on the home page */}
-      {location.pathname === "/" ? (
-        <div style={{ textAlign: "center", margin: "20px 0" }}>
-          <input
-            type="text"
-            placeholder="Search by Genre"
-            value={searchVal}
-            onChange={(e) => setSearchVal(e.target.value)}
-          />
-        </div>
-      ) : null}
-      <Routes>
-        <Route
-          path="/movies/:movieId"
-          element={
-            <Col md={8}>
-              <MovieView movies={movies} />
-            </Col>
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <>
-              {filteredMovies.length === 0 ? (
-                <Col>The list is empty!</Col>
-              ) : (
-                filteredMovies.map((movie) => (
-                  <Col className="mb-4" key={movie._id} md={3}>
-                    <MovieCard
-                      movie={movie}
-                      user={user}
-                      updateFavorites={(updatedFavorites) => {
-                        setUser({ ...user, FavoriteMovies: updatedFavorites });
-                      }}
-                      loggedInUsername={user.Username}
-                    />
-                  </Col>
-                ))
-              )}
-            </>
-          }
-        />
-        <Route path="/profile" element={<ProfileView movies={movies} />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </Row>
-
+      <AuthenticatedApp />
     </BrowserRouter>
   );
 };
