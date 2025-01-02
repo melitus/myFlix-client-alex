@@ -68,7 +68,7 @@ export const ProfileView = ({ movies }) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`/users/${loggedInUsername}`, {
+      const response = await fetch(`${urlAPI}/users/${loggedInUsername}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -81,9 +81,12 @@ export const ProfileView = ({ movies }) => {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
 
-      const updatedUser = await response.json();
-      setUser(updatedUser);
-      setIsEditing(false);
+      //Notifies user of successful update
+      alert("Profile updated successfully. Please log in again the continue.");
+
+      //Clear LocalStorage and redirect to Login page
+      localStorage.clear();
+      window.location.href = "/login";
     } catch (err) {
       setError(err.message);
     }
@@ -132,6 +135,24 @@ export const ProfileView = ({ movies }) => {
       <h1>User Profile</h1>
       {isEditing ? (
         <Form onSubmit={handleFormSubmit}>
+          <Form.Group controlId="formUsername">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="text"
+              name="Username"
+              value={formData.Username || ""}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="formPasswrod">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="text"
+              name="Password"
+              value={formData.Password || ""}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
           <Form.Group controlId="formEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -141,12 +162,16 @@ export const ProfileView = ({ movies }) => {
               onChange={handleInputChange}
             />
           </Form.Group>
-          <Form.Group controlId="formUsername">
-            <Form.Label>Username</Form.Label>
+          <Form.Group controlId="formDateOfBirth">
+            <Form.Label>Birthday</Form.Label>
             <Form.Control
-              type="text"
-              name="Username"
-              value={formData.Username || ""}
+              type="date"
+              name="Birthday"
+              value={
+                formData.Birthday 
+                ? new Date(formData.Birthday).toISOString().split("T")[0]
+                : ""
+              }
               onChange={handleInputChange}
             />
           </Form.Group>
