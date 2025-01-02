@@ -1,59 +1,99 @@
-# MyFlix Front End
+# MyFlix App
 
-## Overview
+MyFlix is a web application for browsing and managing movies. Users can sign up, log in, view details of movies, search by genre, and manage their profiles, including a list of favorite movies.
 
-The **myFlix** front-end application is a client-side interface for a movie database built with React. This interface allows users to view and search for movies, manage their profiles, and curate a list of favorite movies.
+## Features
 
-## Project Goals
+- **User Authentication**: Users can sign up, log in, and log out securely.
+- **Movie Catalog**: A collection of movies fetched from an API.
+- **Search by Genre**: Filter movies using a search bar on the homepage.
+- **Responsive Design**: Built with React and Bootstrap for modern UI and responsiveness.
+- **User Profile**: Manage user data and favorite movies.
 
-- Build a responsive and intuitive user interface for the **myFlix** API.
-- Provide users with a seamless experience for browsing and managing movies.
-- Utilize React and modular CSS for a scalable, maintainable front-end.
+## Prerequisites
 
-## Key Features
+Before you begin, ensure you have the following installed:
 
-- **Movie Catalogue**: Browse and search through a curated list of movies.
-- **User Profile Management**: Manage user profiles and favorite lists.
-- **Responsive Design**: Adaptable layout for various device sizes.
+- **Node.js** (includes npm)
+- **Parcel** (Install Parcel globally if not already installed):
 
-## Technical Requirements
-
-- **React**: JavaScript library for building the user interface.
-- **SCSS**: Enhanced CSS syntax for styling.
-- **React DOM**: Render React components to the DOM.
+    ```bash
+    npm install -g parcel
+    ```
 
 ## Getting Started
 
-### Prerequisites
+### 1. Clone the Repository
 
-- Node.js
-- npm (Node Package Manager)
+Clone the project to your local machine:
 
-### Installation
+    ```bash
+    git clone https://github.com/your-username/myflix-app.git
+    cd myflix-app
+    ```
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/lorondo/myflix-client.git
-   ```
-2. Install dependencies:
-   ```bash
-   cd myflix-client
-   npm install
-   ```
+### 2. Install Dependencies
 
-3. Start the development server:
-   ```bash
-   npm start
-   ```
+Install all required dependencies:
 
-4. Open the app in your browser at `http://localhost:1234`.
+    ```bash
+    npm install
+    ```
 
-## Usage
+### 3. Start the Application
 
-- **Browse Movies**: View all available movies on the home page.
-- **Manage Profile**: Update user information and view favorite movies.
+Run the application using Parcel:
 
-## Future Enhancements
+    ```bash
+    parcel src/index.html
+    ```
 
-- Add routing for different pages (movie details, genres, etc.).
-- Implement user authentication with login and registration.
+Parcel will bundle the app and serve it on a development server. You can open the app in your browser at the URL shown in the terminal, typically `http://localhost:1234`.
+
+## Folder Structure
+
+    ```plaintext
+    src/
+    ├── components/
+    │   ├── movie-card/
+    │   │   └── movie-card.jsx
+    │   ├── movie-view/
+    │   │   └── movie-view.jsx
+    │   ├── login-view/
+    │   │   └── login-view.jsx
+    │   ├── signup-view/
+    │   │   └── signup-view.jsx
+    │   ├── navigation-bar/
+    │   │   └── navigation-bar.jsx
+    │   ├── profile-view/
+    │   │   └── profile-view.jsx
+    │   └── main-view/
+    │       └── main-view.jsx
+    ├── index.html
+    └── index.jsx
+    ```
+
+## Technologies Used
+
+- **Frontend**: React, React Router
+- **Styling**: React Bootstrap
+- **Bundler**: Parcel
+- **API**: A RESTful API providing movie data
+
+## API Setup
+
+The app connects to an external API for movie data. Replace the `urlAPI` variable in `MainView` with the URL of your API if using a custom backend.
+
+    ```javascript
+    const urlAPI = "https://your-api-url.com";
+    ```
+
+## Development
+
+### Hot Module Reloading
+
+Parcel provides hot module reloading, so changes made to your code will automatically reflect in the browser without restarting the server.
+
+## License
+
+This project is licensed under the MIT License.
