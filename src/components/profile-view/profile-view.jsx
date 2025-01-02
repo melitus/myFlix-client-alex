@@ -113,11 +113,6 @@ export const ProfileView = ({ movies }) => {
     }
   };
 
-  // Placeholder for updating favorites
-  const updateFavorites = (movieId) => {
-    console.log("Updating favorites for movie:", movieId);
-  };
-
   // Render loading spinner
   if (loading) {
     return (
@@ -137,20 +132,11 @@ export const ProfileView = ({ movies }) => {
       <h1>User Profile</h1>
       {isEditing ? (
         <Form onSubmit={handleFormSubmit}>
-          <Form.Group controlId="formName">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              name="name"
-              value={formData.Name || ""}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
           <Form.Group controlId="formEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
               type="email"
-              name="email"
+              name="Email"
               value={formData.Email || ""}
               onChange={handleInputChange}
             />
@@ -159,17 +145,8 @@ export const ProfileView = ({ movies }) => {
             <Form.Label>Username</Form.Label>
             <Form.Control
               type="text"
-              name="username"
+              name="Username"
               value={formData.Username || ""}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formDateOfBirth">
-            <Form.Label>Birthday</Form.Label>
-            <Form.Control
-              type="date"
-              name="dateOfBirth"
-              value={formData.Birthday || ""}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -183,13 +160,10 @@ export const ProfileView = ({ movies }) => {
       ) : (
         <div className="profile-details">
           <p>
-            <strong>Name:</strong> {user.name}
+            <strong>Username:</strong> {user.Username}
           </p>
           <p>
             <strong>Email:</strong> {user.Email}
-          </p>
-          <p>
-            <strong>Username:</strong> {user.Username}
           </p>
           <p>
             <strong>Birthday:</strong> {user.Birthday}
