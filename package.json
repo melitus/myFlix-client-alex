@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html",
+    "build": "rm -rf .parcel-cache && parcel build src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  
   "author": "",
   "license": "ISC",
   "description": "The **myFlix** front-end application is a client-side interface for a movie database built with React. This interface allows users to view and search for movies, manage their profiles, and curate a list of favorite movies.",
